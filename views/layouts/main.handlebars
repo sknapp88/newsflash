@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>poor mans newspaper</title>
+  <link rel="shortcut icon" type="favicon/ico" href="GTFavicon.jpg">
+  <!— Latest compiled and minified CSS —>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!— Optional theme —>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css" href="assets/css/hal.css">
+
+  <!— Latest compiled and minified JavaScript —>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <!— minified Jquery —>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <style>
+body {
+  background: -webkit-linear-gradient(#907a70, white); 
+  background: -o-linear-gradient(#907a70, white); 
+  background: -moz-linear-gradient(#907a70, white); 
+    background: linear-gradient(#907a70, white); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 1000px;
+}
+.comment {
+    display: none;
+}
+
+#call-me-hal {
+  background-color: #0d355a;
+  color: white;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header id="call-me-hal" class="jumbotron text-center">
+      <h1>Give me an update Hal.</h1>    
+    </header>
+    <div class="row">
+      <div class="col-xs-2"></div>
+      <div id="article-dump" class="col-xs-8">
+        {{{body}}}
+      </div>
+      <div class="col-xs-2"></div>
+    </div>
+  </div>
+
+</body>
+<script type="text/javascript" defered>
+
+    $(".btn-success").on("click", function(){
+      console.log(this.id);
+      news.addCmt(this.id);
+    });
+
+    $(".btn-danger").on("click", function(){
+      news.delCmt(this.id);
+    });
+
+    const news = {};
+
+    news.addCmt = function( id ) {
+        id = id.replace(/save-/, '')
+        const txtId = "txt-" + id;
+        console.log( txtId );
+
+        const cmtText = document.getElementById(txtId).value;
+        console.log( cmtText );
+
+        $.ajax( {
+            url: "/addcmt",
+            method: "POST",
+            data: {
+                id: id,
+                comment: cmtText
+            }
+        })
+        .done( function( result ) {
+            console.log( result );
+            console.log( "Comment posted" );
+            document.getElementById('cmt-'+txtId).innerHTML = cmtText;
+            document.getElementById(txtId).value = '';
+        });
+    };
+
+    news.delCmt = function( id ) {
+        id = id.replace(/del-/, '');
+        const cmttxtId = "cmt-txt-" + id;
+        console.log( cmttxtId );
+
+        // const cmtText = document.getElementById(txtId).value;
+        // console.log( cmtText );
+
+        $.ajax( {
+            url: "/delcmt",
+            method: "POST",
+            data: {
+                id: id
+            }
+        })
+        .done( function( result ) {
+            console.log( result );
+            console.log( "Comment deleted" );
+            document.getElementById(cmttxtId).innerHTML = "";
+        });
+    };
+
+</script>
+</html>

@@ -1,0 +1,20 @@
+
+<div class="">
+    {{#each data}}
+    <div class="well well-sm">
+        <h3>{{this.title}}</h3><a href="{{this.link}}" target="_blank">{{this.link}}</a>
+        <div>
+            <button class="btn btn-info" onclick="document.getElementById('cmt-{{this._id}}').style.display='block'">Comment</button>
+            <div id="cmt-{{this._id}}" class="comment" >
+                <h4>Your thoughts</h4>
+                <div id="cmt-txt-{{this._id}}"><p>{{this.comment}}</p></div>
+                <input type="text" id="txt-{{this._id}}" placeholder="Add your own comment" size="40">
+                <div>
+                    <button id="save-{{this._id}}" class="btn btn-success">Save comment</button>
+                    <button id="del-{{this._id}}" class="btn btn-danger">Remove comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
